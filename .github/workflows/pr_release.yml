@@ -36,16 +36,6 @@ jobs:
         with:
           tag_name: "${{ env.VERSION }}"
           name: "Release ${{ env.VERSION }}"
-          body: "Automated release for version ${{ env.VERSION }}."
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload .oar artifact to release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: "${{ env.VERSION }}"
-          asset_path: target/dart-${{ env.VERSION }}.oar
-          asset_name: dart-${{ env.VERSION }}.oar
-          asset_content_type: application/octet-stream
+          body: "New release DDoS Ai-powered Recognition and Traceback ${{ env.VERSION }}."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
