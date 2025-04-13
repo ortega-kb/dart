@@ -3,6 +3,8 @@ name: Release via push on Master
 on:
   push:
     branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
   build-release:
