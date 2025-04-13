@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: amazon-corretto
-          java-version: '11'
+          java-version: '11.0.26.4.1 '
 
       - name: Extract project version from pom.xml
         id: get_version
