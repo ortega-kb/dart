@@ -1,0 +1,49 @@
+name: Release via push on Master
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 11 (Amazon Corretto)
+        uses: actions/setup-java@v4
+        with:
+          distribution: amazon-corretto
+          java-version: '11'
+
+      - name: Extract project version from pom.xml
+        id: get_version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Project version: $VERSION"
+
+      - name: Build project (Maven)
+        run: mvn clean package
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "${{ env.VERSION }}"
+          name: "Release ${{ env.VERSION }}"
+          body: "Automated release for version ${{ env.VERSION }}."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload .oar artifact to release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "${{ env.VERSION }}"
+          asset_path: target/dart-${{ env.VERSION }}.oar
+          asset_name: dart-${{ env.VERSION }}.oar
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
